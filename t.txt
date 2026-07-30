@@ -1,0 +1,320 @@
+local GrillHub = { Flags = { ESP = false, Tracers = false, Chams = false, Boxes = false, Snaplines = false, Names = false, Health = false, Distance = false, FOV = false, FOVRadius = 120, Aimbot = false, AimbotSmooth = 5, AimbotFOV = 120, Silent = false, Triggerbot = false, TriggerDelay = 0.1, NoClip = false, Speed = false, SpeedValue = 25, Jump = false, JumpValue = 60, Fly = false, FlySpeed = 35, BHop = false, AntiFling = false, Spin = false, SpinSpeed = 5, Invisible = false, AutoFarm = false, AutoRespawn = false, AvoidMurder = false, KillAll = false, FakeKorblox = false, FakeHeadless = false, Wobble = false, WobbleSize = 1, TouchFling = false, ClickFling = false, TPToPlayer = false, TPToMurderer = false, TPToSheriff = false, TPToLobby = false, TeleportTarget = "", SpawnWeapons = false } }
+
+local ScreenGui = Instance.new("ScreenGui") ScreenGui.Name = "GrillHub" ScreenGui.ResetOnSpawn = false ScreenGui.Parent = LP:WaitForChild("PlayerGui")
+
+local Main = Instance.new("Frame") Main.Size = UDim2.new(0, 400, 0, 500) Main.Position = UDim2.new(0.5, -200, 0.5, -250) Main.BackgroundColor3 = Color3.fromRGB(15, 15, 25) Main.BackgroundTransparency = 0.1 Main.BorderSizePixel = 0 Main.ClipsDescendants = true Main.Parent = ScreenGui
+
+local Corner = Instance.new("UICorner") Corner.CornerRadius = UDim.new(0, 12) Corner.Parent = Main
+
+local Stroke = Instance.new("UIStroke") Stroke.Thickness = 2 Stroke.Color = Color3.fromRGB(0, 150, 255) Stroke.Transparency = 0.4 Stroke.Parent = Main
+
+local Title = Instance.new("TextLabel") Title.Size = UDim2.new(1, 0, 0, 40) Title.BackgroundColor3 = Color3.fromRGB(25, 25, 40) Title.Text = "GRILL HUB" Title.TextColor3 = Color3.fromRGB(0, 180, 255) Title.TextScaled = true Title.Font = Enum.Font.GothamBold Title.Parent = Main
+
+local Close = Instance.new("TextButton") Close.Size = UDim2.new(0, 35, 0, 30) Close.Position = UDim2.new(1, -40, 0, 5) Close.BackgroundColor3 = Color3.fromRGB(200, 30, 30) Close.Text = "X" Close.TextColor3 = Color3.fromRGB(255, 255, 255) Close.TextScaled = true Close.Font = Enum.Font.GothamBold Close.Parent = Main Close.MouseButton1Click:Connect(function() Main.Visible = not Main.Visible end)
+
+local Scroll = Instance.new("ScrollingFrame") Scroll.Size = UDim2.new(1, -10, 1, -50) Scroll.Position = UDim2.new(0, 5, 0, 45) Scroll.BackgroundTransparency = 1 Scroll.BorderSizePixel = 0 Scroll.CanvasSize = UDim2.new(0, 0, 0, 1200) Scroll.ScrollBarThickness = 4 Scroll.ScrollBarImageColor3 = Color3.fromRGB(0, 150, 255) Scroll.Parent = Main
+
+local y = 5
+
+local function AddToggle(text, key) local btn = Instance.new("TextButton") btn.Size = UDim2.new(0.9, 0, 0, 30) btn.Position = UDim2.new(0.05, 0, 0, y) btn.BackgroundColor3 = Color3.fromRGB(30, 30, 50) btn.Text = text .. " [OFF]" btn.TextColor3 = Color3.fromRGB(200, 200, 255) btn.TextScaled = true btn.Font = Enum.Font.GothamBold btn.Parent = Scroll local state = false btn.MouseButton1Click:Connect(function() state = not state btn.Text = text .. (state and " [ON]" or " [OFF]") btn.BackgroundColor3 = state and Color3.fromRGB(0, 200, 100) or Color3.fromRGB(30, 30, 50) MilkHub.Flags[key] = state end) y = y + 35 end
+
+local function AddSlider(text, key, min, max, default) local f = Instance.new("Frame") f.Size = UDim2.new(0.9, 0, 0, 35) f.Position = UDim2.new(0.05, 0, 0, y) f.BackgroundColor3 = Color3.fromRGB(25, 25, 45) f.BackgroundTransparency = 0.5 f.Parent = Scroll
+
+local lbl = Instance.new("TextLabel")
+lbl.Size = UDim2.new(0.5, 0, 1, 0)
+lbl.BackgroundTransparency = 1
+lbl.Text = text .. ": " .. tostring(default)
+lbl.TextColor3 = Color3.fromRGB(200, 200, 255)
+lbl.TextXAlignment = Enum.TextXAlignment.Left
+lbl.TextSize = 14
+lbl.Font = Enum.Font.Gotham
+lbl.Parent = f
+
+local box = Instance.new("TextBox")
+box.Size = UDim2.new(0.3, 0, 0.7, 0)
+box.Position = UDim2.new(0.6, 0, 0.15, 0)
+box.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+box.Text = tostring(default)
+box.TextColor3 = Color3.fromRGB(255, 255, 255)
+box.TextScaled = true
+box.Font = Enum.Font.GothamBold
+box.Parent = f
+
+GrillHub.Flags[key] = default
+
+box.FocusLost:Connect(function()
+    local v = tonumber(box.Text)
+    if v then
+        v = math.clamp(v, min, max)
+        GrillHub.Flags[key] = v
+        box.Text = tostring(v)
+        lbl.Text = text .. ": " .. tostring(v)
+    end
+end)
+y = y + 40
+end
+
+local function AddButton(text, func) local btn = Instance.new("TextButton") btn.Size = UDim2.new(0.9, 0, 0, 30) btn.Position = UDim2.new(0.05, 0, 0, y) btn.BackgroundColor3 = Color3.fromRGB(40, 40, 70) btn.Text = text btn.TextColor3 = Color3.fromRGB(255, 200, 100) btn.TextScaled = true btn.Font = Enum.Font.GothamBold btn.Parent = Scroll btn.MouseButton1Click:Connect(func) y = y + 35 end
+
+local function AddTP(text, key) AddButton(text, function() GrillHub.Flags[key] = true end) end
+
+AddToggle("Noclip", "NoClip") AddToggle("Speed", "Speed") AddSlider("Speed Value", "SpeedValue", 10, 100, 25) AddToggle("Jump", "Jump") AddSlider("Jump Value", "JumpValue", 20, 200, 60) AddToggle("Fly (F)", "Fly") AddSlider("Fly Speed", "FlySpeed", 10, 80, 35) AddToggle("BHop", "BHop") AddToggle("Anti Fling", "AntiFling") AddToggle("Spin", "Spin") AddSlider("Spin Speed", "SpinSpeed", 1, 30, 5) AddToggle("Invisible", "Invisible") AddToggle("Wobble", "Wobble") AddSlider("Wobble Size", "WobbleSize", 0.5, 5, 1)
+
+AddToggle("Auto Farm", "AutoFarm") AddToggle("Auto Respawn", "AutoRespawn") AddToggle("Avoid Murder", "AvoidMurder") AddToggle("Kill All (murderer)", "KillAll") AddToggle("Touch Fling", "TouchFling") AddToggle("Click Fling", "ClickFling")
+
+AddTP("TP to Lobby", "TPToLobby") AddTP("TP to Murderer", "TPToMurderer") AddTP("TP to Sheriff", "TPToSheriff")
+
+AddToggle("Fake Korblox", "FakeKorblox") AddToggle("Fake Headless", "FakeHeadless") AddToggle("Spawn Weapons", "SpawnWeapons")
+
+RunService.Heartbeat:Connect(function() for _, v in pairs(ESPObjects) do v:Destroy() end ESPObjects = {}
+
+local char = LP.Character
+if not char then return end
+local root = char:FindFirstChild("HumanoidRootPart")
+if not root then return end
+local hum = char:FindFirstChild("Humanoid")
+if not hum then return end
+
+if GrillHub.Flags.ESP then
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= LP and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+            local pos, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+            if vis then
+                local dist = math.floor(pos.Z)
+                if GrillHub.Flags.Names then
+                    local tag = Instance.new("TextLabel")
+                    tag.Size = UDim2.new(0, 200, 0, 20)
+                    tag.Position = UDim2.new(0, pos.X - 100, 0, pos.Y - 80 - (GrillHub.Flags.Boxes and 30 or 0))
+                    tag.BackgroundTransparency = 1
+                    tag.Text = plr.Name .. (GrillHub.Flags.Distance and " ["..dist.."m]" or "")
+                    tag.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    tag.TextScaled = true
+                    tag.Font = Enum.Font.GothamBold
+                    tag.Parent = ScreenGui
+                    table.insert(ESPObjects, tag)
+                end
+                if GrillHub.Flags.Boxes then
+                    local box = Instance.new("Frame")
+                    local s = 50 / pos.Z * 8
+                    box.Size = UDim2.new(0, s, 0, s * 1.4)
+                    box.Position = UDim2.new(0, pos.X - s/2, 0, pos.Y - s*0.7)
+                    box.BackgroundTransparency = 0.5
+                    box.BackgroundColor3 = Color3.fromRGB(255, 0, 100)
+                    box.BorderSizePixel = 1
+                    box.BorderColor3 = Color3.fromRGB(255, 255, 255)
+                    box.Parent = ScreenGui
+                    table.insert(ESPObjects, box)
+                end
+                if GrillHub.Flags.Tracers then
+                    local line = Instance.new("Frame")
+                    local cx = Camera.ViewportSize.X/2
+                    local cy = Camera.ViewportSize.Y/2
+                    local dx = pos.X - cx
+                    local dy = pos.Y - cy
+                    local dist2 = math.sqrt(dx^2 + dy^2)
+                    local angle = math.atan2(dy, dx)
+                    line.Size = UDim2.new(0, dist2, 0, 2)
+                    line.Position = UDim2.new(0, cx + dx/2 - dist2/2, 0, cy + dy/2 - 1)
+                    line.Rotation = math.deg(angle)
+                    line.BackgroundColor3 = Color3.fromRGB(0, 200, 255)
+                    line.BackgroundTransparency = 0.3
+                    line.Parent = ScreenGui
+                    table.insert(ESPObjects, line)
+                end
+                if GrillHub.Flags.Snaplines then
+                    local line = Instance.new("Frame")
+                    line.Size = UDim2.new(0, 2, 0, pos.Y)
+                    line.Position = UDim2.new(0, pos.X - 1, 0, 0)
+                    line.BackgroundColor3 = Color3.fromRGB(200, 100, 255)
+                    line.BackgroundTransparency = 0.4
+                    line.Parent = ScreenGui
+                    table.insert(ESPObjects, line)
+                end
+                if GrillHub.Flags.Chams then
+                    for _, p in pairs(plr.Character:GetDescendants()) do
+                        if p:IsA("BasePart") then
+                            p.Material = Enum.Material.Neon
+                            p.Color = Color3.fromRGB(0, 200, 255)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+if GrillHub.Flags.FOV then
+    local fov = Instance.new("Frame")
+    fov.Size = UDim2.new(0, GrillHub.Flags.FOVRadius * 2, 0, GrillHub.Flags.FOVRadius * 2)
+    fov.Position = UDim2.new(0.5, -GrillHub.Flags.FOVRadius, 0.5, -GrillHub.Flags.FOVRadius)
+    fov.BackgroundTransparency = 1
+    fov.BorderSizePixel = 2
+    fov.BorderColor3 = Color3.fromRGB(0, 255, 100)
+    fov.Parent = ScreenGui
+    table.insert(ESPObjects, fov)
+end
+
+if GrillHub.Flags.Aimbot then
+    local target = nil
+    local minDist = GrillHub.Flags.AimbotFOV or 120
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= LP and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+            local pos, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+            if vis then
+                local dist = (Vector2.new(pos.X, pos.Y) - Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)).Magnitude
+                if dist < minDist then
+                    minDist = dist
+                    target = plr
+                end
+            end
+        end
+    end
+    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+        local targetPos = target.Character.HumanoidRootPart.Position + Vector3.new(0, 2, 0)
+        local lookAt = CFrame.new(Camera.CFrame.Position, targetPos)
+        Camera.CFrame = Camera.CFrame:Lerp(lookAt, 1 / GrillHub.Flags.AimbotSmooth)
+    end
+end
+
+if GrillHub.Flags.Silent then
+end
+
+if GrillHub.Flags.Triggerbot then
+    local target = nil
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= LP and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+            local pos, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+            if vis and pos.Z < 50 then
+                target = plr
+                break
+            end
+        end
+    end
+    if target and target.Character and target.Character:FindFirstChild("Humanoid") then
+        task.wait(GrillHub.Flags.TriggerDelay)
+        target.Character.Humanoid.Health = 0
+    end
+end
+
+if GrillHub.Flags.NoClip and char then
+    for _, p in pairs(char:GetDescendants()) do
+        if p:IsA("BasePart") then p.CanCollide = false end
+    end
+end
+
+if GrillHub.Flags.Speed then
+    hum.WalkSpeed = GrillHub.Flags.SpeedValue
+else
+    hum.WalkSpeed = 16
+end
+
+if GrillHub.Flags.Jump then
+    hum.JumpPower = GrillHub.Flags.JumpValue
+else
+    hum.JumpPower = 50
+end
+
+if GrillHub.Flags.Fly and root then
+    local v = Vector3.new()
+    if UIS:IsKeyDown(Enum.KeyCode.W) then v = v + Camera.CFrame.LookVector * GrillHub.Flags.FlySpeed end
+    if UIS:IsKeyDown(Enum.KeyCode.S) then v = v - Camera.CFrame.LookVector * GrillHub.Flags.FlySpeed end
+    if UIS:IsKeyDown(Enum.KeyCode.A) then v = v - Camera.CFrame.RightVector * GrillHub.Flags.FlySpeed end
+    if UIS:IsKeyDown(Enum.KeyCode.D) then v = v + Camera.CFrame.RightVector * GrillHub.Flags.FlySpeed end
+    if UIS:IsKeyDown(Enum.KeyCode.Space) then v = v + Vector3.new(0, GrillHub.Flags.FlySpeed, 0) end
+    if UIS:IsKeyDown(Enum.KeyCode.LeftShift) then v = v - Vector3.new(0, GrillHub.Flags.FlySpeed, 0) end
+    root.AssemblyLinearVelocity = v
+end
+
+if GrillHub.Flags.BHop and hum and hum.FloorMaterial ~= Enum.Material.Air then
+    hum.Jump = true
+end
+
+if GrillHub.Flags.Spin and root then
+    root.CFrame = root.CFrame * CFrame.Angles(0, math.rad(GrillHub.Flags.SpinSpeed), 0)
+end
+
+if GrillHub.Flags.Invisible and char then
+    for _, p in pairs(char:GetDescendants()) do
+        if p:IsA("BasePart") then p.Transparency = 1 end
+    end
+end
+
+if GrillHub.Flags.Wobble and root then
+    local s = GrillHub.Flags.WobbleSize or 1
+    root.Size = Vector3.new(2 * s, 1 * s, 2 * s)
+    root.CFrame = root.CFrame * CFrame.Angles(math.sin(tick() * 7) * 0.2, 0, 0)
+end
+
+if char then
+    for _, p in pairs(char:GetDescendants()) do
+        if p:IsA("BasePart") then
+            if GrillHub.Flags.FakeKorblox and (string.find(p.Name:lower(), "leg") or string.find(p.Name:lower(), "foot")) then
+                p.Size = Vector3.new(p.Size.X * 0.7, p.Size.Y * 0.25, p.Size.Z * 0.7)
+            end
+            if GrillHub.Flags.FakeHeadless and string.find(p.Name:lower(), "head") then
+                p.Transparency = 1
+            end
+        end
+    end
+end
+
+if GrillHub.Flags.AutoFarm and root then
+    local nearest = nil
+    local nd = math.huge
+    for _, obj in pairs(Workspace:GetDescendants()) do
+        if obj:IsA("BasePart") and (string.find(obj.Name:lower(), "coin") or string.find(obj.Name:lower(), "gem")) then
+            local d = (root.Position - obj.Position).Magnitude
+            if d < nd then
+                nd = d
+                nearest = obj
+            end
+        end
+    end
+    if nearest then
+        root.CFrame = nearest.CFrame + Vector3.new(0, 2, 0)
+    end
+end
+
+if GrillHub.Flags.KillAll then
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= LP and plr.Character and plr.Character:FindFirstChild("Humanoid") then
+            plr.Character.Humanoid.Health = 0
+        end
+    end
+end
+
+if GrillHub.Flags.AvoidMurder and root then
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= LP and plr.Character then
+            local has = false
+            for _, t in pairs(plr.Character:GetChildren()) do
+                if t:IsA("Tool") and (string.find(t.Name:lower(), "knife") or string.find(t.Name:lower(), "murder")) then
+                    has = true
+                end
+            end
+            if has and plr.Character:FindFirstChild("HumanoidRootPart") then
+                local dist = (root.Position - plr.Character.HumanoidRootPart.Position).Magnitude
+                if dist < 20 then
+                    root.CFrame = root.CFrame + (root.Position - plr.Character.HumanoidRootPart.Position).Unit * 15
+                end
+            end
+        end
+    end
+end
+
+if GrillHub.Flags.TouchFling and root then
+    for _, obj in pairs(Workspace:GetDescendants()) do
+        if obj:IsA("BasePart") and obj ~= root and (root.Position - obj.Position).Magnitude < 4 then
+            obj.AssemblyLinearVelocity = Vector3.new(math.random(-80, 80), 120, math.random(-80, 80))
+        end
+    end
+end
+
+if GrillHub.Flags.AntiFling and root and root.AssemblyLinearVelocity.Magnitude > 80 then
+    root.CFrame = root.CFrame + Vector3.new(0, 5, 0)
+end
+
+if GrillHub.Flags.AutoRespawn then
+    local bag = LP:FindFirstChild("Bag") or LP:FindFirstChild("Inventory")
+    if bag and bag:IsA("IntValue") and bag.Value >= 10 then
+        LP.Character:BreakJoi
