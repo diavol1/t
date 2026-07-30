@@ -1,3 +1,4 @@
+```lua
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
@@ -9,8 +10,8 @@ ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = Player:WaitForChild("PlayerGui")
 
 local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 420, 0, 450)
-Frame.Position = UDim2.new(0.5, -210, 0.5, -225)
+Frame.Size = UDim2.new(0, 420, 0, 500)
+Frame.Position = UDim2.new(0.5, -210, 0.5, -250)
 Frame.BackgroundColor3 = Color3.fromRGB(20, 25, 45)
 Frame.BackgroundTransparency = 0.05
 Frame.BorderColor3 = Color3.fromRGB(200, 180, 100)
@@ -22,9 +23,51 @@ local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 24)
 UICorner.Parent = Frame
 
+local MilkHubFrame = Instance.new("Frame")
+MilkHubFrame.Size = UDim2.new(1, 0, 0, 40)
+MilkHubFrame.Position = UDim2.new(0, 0, 0, 0)
+MilkHubFrame.BackgroundColor3 = Color3.fromRGB(15, 20, 35)
+MilkHubFrame.BackgroundTransparency = 0.3
+MilkHubFrame.BorderSizePixel = 0
+MilkHubFrame.Parent = Frame
+
+local MilkHubCorner = Instance.new("UICorner")
+MilkHubCorner.CornerRadius = UDim.new(0, 24)
+MilkHubCorner.Parent = MilkHubFrame
+
+local MilkHubLabel = Instance.new("TextLabel")
+MilkHubLabel.Size = UDim2.new(1, 0, 1, 0)
+MilkHubLabel.BackgroundTransparency = 1
+MilkHubLabel.Text = "🥛 MilkHub"
+MilkHubLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+MilkHubLabel.TextSize = 20
+MilkHubLabel.Font = Enum.Font.GothamBold
+MilkHubLabel.TextXAlignment = Enum.TextXAlignment.Center
+MilkHubLabel.Parent = MilkHubFrame
+
+local MilkHubSub = Instance.new("TextLabel")
+MilkHubSub.Size = UDim2.new(1, 0, 0, 15)
+MilkHubSub.Position = UDim2.new(0, 0, 1, -15)
+MilkHubSub.BackgroundTransparency = 1
+MilkHubSub.Text = "⚡ Premium Item Spawner ⚡"
+MilkHubSub.TextColor3 = Color3.fromRGB(200, 180, 100)
+MilkHubSub.TextSize = 10
+MilkHubSub.Font = Enum.Font.GothamMedium
+MilkHubSub.TextXAlignment = Enum.TextXAlignment.Center
+MilkHubSub.TextTransparency = 0.3
+MilkHubSub.Parent = MilkHubFrame
+
+local Divider = Instance.new("Frame")
+Divider.Size = UDim2.new(0.9, 0, 0, 1)
+Divider.Position = UDim2.new(0.05, 0, 0.08, 0)
+Divider.BackgroundColor3 = Color3.fromRGB(200, 180, 100)
+Divider.BackgroundTransparency = 0.5
+Divider.BorderSizePixel = 0
+Divider.Parent = Frame
+
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0, 50)
-Title.Position = UDim2.new(0, 0, 0, 10)
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Position = UDim2.new(0, 0, 0, 50)
 Title.BackgroundTransparency = 1
 Title.Text = "🎯 Item Spawner · MM2"
 Title.TextColor3 = Color3.fromRGB(240, 210, 80)
@@ -34,7 +77,7 @@ Title.Parent = Frame
 
 local CategoryLabel = Instance.new("TextLabel")
 CategoryLabel.Size = UDim2.new(1, -40, 0, 30)
-CategoryLabel.Position = UDim2.new(0, 20, 0, 60)
+CategoryLabel.Position = UDim2.new(0, 20, 0, 95)
 CategoryLabel.BackgroundTransparency = 1
 CategoryLabel.Text = "Select Category:"
 CategoryLabel.TextColor3 = Color3.fromRGB(160, 175, 210)
@@ -45,7 +88,7 @@ CategoryLabel.Parent = Frame
 
 local CategoryContainer = Instance.new("Frame")
 CategoryContainer.Size = UDim2.new(1, -40, 0, 40)
-CategoryContainer.Position = UDim2.new(0, 20, 0, 90)
+CategoryContainer.Position = UDim2.new(0, 20, 0, 125)
 CategoryContainer.BackgroundTransparency = 1
 CategoryContainer.Parent = Frame
 
@@ -74,7 +117,7 @@ end
 
 local SelectedCatLabel = Instance.new("TextLabel")
 SelectedCatLabel.Size = UDim2.new(1, -40, 0, 25)
-SelectedCatLabel.Position = UDim2.new(0, 20, 0, 135)
+SelectedCatLabel.Position = UDim2.new(0, 20, 0, 170)
 SelectedCatLabel.BackgroundTransparency = 1
 SelectedCatLabel.Text = "Selected: 🔪 Knives"
 SelectedCatLabel.TextColor3 = Color3.fromRGB(240, 210, 80)
@@ -85,7 +128,7 @@ SelectedCatLabel.Parent = Frame
 
 local InputLabel = Instance.new("TextLabel")
 InputLabel.Size = UDim2.new(1, -40, 0, 25)
-InputLabel.Position = UDim2.new(0, 20, 0, 165)
+InputLabel.Position = UDim2.new(0, 20, 0, 200)
 InputLabel.BackgroundTransparency = 1
 InputLabel.Text = "Enter item name:"
 InputLabel.TextColor3 = Color3.fromRGB(160, 175, 210)
@@ -96,7 +139,7 @@ InputLabel.Parent = Frame
 
 local TextBox = Instance.new("TextBox")
 TextBox.Size = UDim2.new(0, 280, 0, 40)
-TextBox.Position = UDim2.new(0.5, -140, 0, 195)
+TextBox.Position = UDim2.new(0.5, -140, 0, 230)
 TextBox.BackgroundColor3 = Color3.fromRGB(15, 20, 35)
 TextBox.BorderColor3 = Color3.fromRGB(200, 180, 100)
 TextBox.BorderSizePixel = 2
@@ -114,7 +157,7 @@ TextBoxCorner.Parent = TextBox
 
 local Button = Instance.new("TextButton")
 Button.Size = UDim2.new(0, 180, 0, 48)
-Button.Position = UDim2.new(0.5, -90, 0, 255)
+Button.Position = UDim2.new(0.5, -90, 0, 290)
 Button.BackgroundColor3 = Color3.fromRGB(220, 180, 50)
 Button.BorderSizePixel = 0
 Button.Text = "🪄 CLAIM ITEM"
@@ -129,7 +172,7 @@ ButtonCorner.Parent = Button
 
 local TimerLabel = Instance.new("TextLabel")
 TimerLabel.Size = UDim2.new(1, -40, 0, 30)
-TimerLabel.Position = UDim2.new(0, 20, 0, 315)
+TimerLabel.Position = UDim2.new(0, 20, 0, 350)
 TimerLabel.BackgroundTransparency = 1
 TimerLabel.Text = "⏳ Ready to claim!"
 TimerLabel.TextColor3 = Color3.fromRGB(180, 190, 220)
@@ -139,7 +182,7 @@ TimerLabel.Parent = Frame
 
 local ResultLabel = Instance.new("TextLabel")
 ResultLabel.Size = UDim2.new(1, -40, 0, 30)
-ResultLabel.Position = UDim2.new(0, 20, 0, 355)
+ResultLabel.Position = UDim2.new(0, 20, 0, 390)
 ResultLabel.BackgroundTransparency = 1
 ResultLabel.Text = "✨ Select a category and enter an item!"
 ResultLabel.TextColor3 = Color3.fromRGB(180, 190, 220)
@@ -150,7 +193,7 @@ ResultLabel.Parent = Frame
 
 local ProgressBarBg = Instance.new("Frame")
 ProgressBarBg.Size = UDim2.new(0, 280, 0, 8)
-ProgressBarBg.Position = UDim2.new(0.5, -140, 0, 395)
+ProgressBarBg.Position = UDim2.new(0.5, -140, 0, 430)
 ProgressBarBg.BackgroundColor3 = Color3.fromRGB(40, 45, 70)
 ProgressBarBg.BorderSizePixel = 0
 ProgressBarBg.Parent = Frame
@@ -168,6 +211,18 @@ ProgressBar.Parent = ProgressBarBg
 local ProgressBarCorner2 = Instance.new("UICorner")
 ProgressBarCorner2.CornerRadius = UDim.new(0, 4)
 ProgressBarCorner2.Parent = ProgressBar
+
+local Footer = Instance.new("TextLabel")
+Footer.Size = UDim2.new(1, 0, 0, 20)
+Footer.Position = UDim2.new(0, 0, 1, -22)
+Footer.BackgroundTransparency = 1
+Footer.Text = "🥛 MilkHub · Made with ❤️"
+Footer.TextColor3 = Color3.fromRGB(150, 160, 190)
+Footer.TextSize = 11
+Footer.Font = Enum.Font.GothamMedium
+Footer.TextXAlignment = Enum.TextXAlignment.Center
+Footer.TextTransparency = 0.5
+Footer.Parent = Frame
 
 local currentCategory = "🔪 Knives"
 local selectedCategoryIndex = 1
@@ -468,3 +523,4 @@ game:GetService("Players").LocalPlayer:GetPropertyChangedSignal("Parent"):Connec
         end
     end
 end)
+```
