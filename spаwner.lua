@@ -1,4 +1,3 @@
--- Простой тестовый GUI
 local Player = game.Players.LocalPlayer
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = Player.PlayerGui
